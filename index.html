@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paul Arts Work — Custom Digital Art & Illustrations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07080f;
+    --bg2: #0c0e1a;
+    --bg3: #10122000;
+    --purple: #8b5cf6;
+    --purple-light: #a78bfa;
+    --cyan: #22d3ee;
+    --neon: #6366f1;
+    --text: #e8eaf6;
+    --muted: #7c84a3;
+    --card: #0f1120;
+    --border: rgba(139,92,246,0.18);
+    --glow: rgba(139,92,246,0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  #cursor {
+    position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;
+    width: 12px; height: 12px;
+    background: var(--cyan);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform .12s ease, background .2s;
+    mix-blend-mode: screen;
+  }
+  #cursor-ring {
+    position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998;
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--purple-light);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform .35s cubic-bezier(.17,.67,.83,.67), opacity .3s;
+    opacity: 0.6;
+  }
+  body:hover #cursor { transform: translate(-50%,-50%) scale(1); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 2px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 5vw;
+    transition: background .4s, backdrop-filter .4s;
+  }
+  nav.scrolled {
+    background: rgba(7,8,15,0.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    letter-spacing: -.02em;
+    color: #fff;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--purple-light); }
+  .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: .9rem;
+    font-weight: 500; letter-spacing: .02em;
+    transition: color .25s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; left: 0; bottom: -3px;
+    width: 0; height: 1px;
+    background: var(--cyan);
+    transition: width .3s ease;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    background: var(--purple);
+    color: #fff !important;
+    padding: .45rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 600 !important;
+    transition: background .25s, box-shadow .25s !important;
+  }
+  .nav-cta:hover { background: var(--purple-light) !important; box-shadow: 0 0 20px var(--glow); }
+  .nav-cta::after { display: none !important; }
+
+  /* ── HAMBURGER ── */
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: none; background: none; border: none; padding: 4px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: .3s; }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; padding: 0 5vw;
+    text-align: center;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 40%, rgba(99,102,241,.22) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 80% 20%, rgba(34,211,238,.13) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 15% 80%, rgba(139,92,246,.15) 0%, transparent 65%);
+    animation: breathe 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes breathe {
+    0% { opacity: .8; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.04); }
+  }
+
+  /* Grid overlay */
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0; opacity: .045;
+    background-image:
+      linear-gradient(var(--cyan) 1px, transparent 1px),
+      linear-gradient(90deg, var(--cyan) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Floating art cards */
+  .hero-art {
+    position: absolute; border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 30px var(--glow);
+    opacity: .55;
+    animation: floatArt 10s ease-in-out infinite;
+  }
+  .hero-art-1 { width: 200px; height: 240px; top: 12%; left: 4%; animation-delay: 0s; }
+  .hero-art-2 { width: 170px; height: 200px; top: 20%; right: 5%; animation-delay: -3s; }
+  .hero-art-3 { width: 140px; height: 180px; bottom: 15%; left: 8%; animation-delay: -6s; }
+  .hero-art-4 { width: 160px; height: 200px; bottom: 12%; right: 7%; animation-delay: -4.5s; }
+
+  @keyframes floatArt {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-18px) rotate(.8deg); }
+    66% { transform: translateY(10px) rotate(-.6deg); }
+  }
+
+  .art-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    position: relative; overflow: hidden;
+  }
+  .art-p1 { background: linear-gradient(135deg, #1a0a3e, #3b1d8a, #6d28d9); }
+  .art-p2 { background: linear-gradient(135deg, #0c1a3e, #1e3a8a, #0891b2); }
+  .art-p3 { background: linear-gradient(135deg, #1e0a2e, #7c3aed, #4c1d95); }
+  .art-p4 { background: linear-gradient(135deg, #0a1a2e, #1d4ed8, #6d28d9); }
+  .art-placeholder::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,.06) 50%, transparent 70%);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  /* SVG art shapes */
+  .svg-art { width: 100%; height: 100%; position: absolute; inset: 0; }
+
+  .hero-content { position: relative; z-index: 2; max-width: 760px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(139,92,246,.12);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: .35rem 1rem;
+    font-size: .8rem;
+    color: var(--purple-light);
+    margin-bottom: 1.8rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    animation: fadeUp .8s ease both;
+  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34,211,238,.6); }
+    50% { box-shadow: 0 0 0 6px rgba(34,211,238,0); }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    line-height: 1.08;
+    letter-spacing: -.03em;
+    margin-bottom: 1.4rem;
+    animation: fadeUp .9s .1s ease both;
+  }
+  h1 em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--purple-light), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 2.4rem;
+    font-weight: 300;
+    animation: fadeUp 1s .2s ease both;
+  }
+
+  .hero-ctas {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 1s .35s ease both;
+  }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: linear-gradient(135deg, var(--purple), var(--neon));
+    color: #fff;
+    padding: .85rem 2rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .3s;
+    box-shadow: 0 0 30px rgba(139,92,246,.4);
+    border: none; cursor: none;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(139,92,246,.6);
+  }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: transparent;
+    color: var(--text);
+    padding: .85rem 2rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: border-color .3s, color .3s, box-shadow .3s;
+    cursor: none;
+  }
+  .btn-ghost:hover {
+    border-color: var(--purple-light);
+    color: var(--purple-light);
+    box-shadow: 0 0 20px var(--glow);
+  }
+
+  .scroll-hint {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: .5rem;
+    color: var(--muted); font-size: .75rem; letter-spacing: .1em;
+    text-transform: uppercase;
+    animation: fadeUp 1.2s .6s ease both;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--purple), transparent);
+    animation: scrollDrop 2s ease-in-out infinite;
+  }
+  @keyframes scrollDrop {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 7rem 5vw; }
+
+  .section-label {
+    display: inline-flex; align-items: center; gap: .5rem;
+    color: var(--cyan);
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .section-label::before {
+    content: '';
+    display: block; width: 28px; height: 1px;
+    background: var(--cyan);
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    letter-spacing: -.025em;
+    line-height: 1.15;
+    margin-bottom: .75rem;
+  }
+  .section-title em {
+    font-style: normal;
+    color: var(--purple-light);
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-weight: 300;
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 500px;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ── PORTFOLIO ── */
+  #portfolio { background: var(--bg2); }
+
+  .portfolio-header { margin-bottom: 2.5rem; }
+
+  .filter-tabs {
+    display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 2.5rem;
+  }
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: .45rem 1.2rem;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    font-weight: 500;
+    cursor: none;
+    transition: all .25s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: rgba(139,92,246,.15);
+    border-color: var(--purple);
+    color: var(--purple-light);
+  }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .portfolio-item {
+    position: relative; border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--border);
+    aspect-ratio: 3/4;
+    cursor: none;
+    transition: transform .35s cubic-bezier(.25,.46,.45,.94), box-shadow .35s;
+  }
+  .portfolio-item:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 40px var(--glow);
+  }
+  .portfolio-item:nth-child(2) { aspect-ratio: 3/5; }
+  .portfolio-item:nth-child(4) { aspect-ratio: 1; }
+
+  .portfolio-art {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; position: relative; overflow: hidden;
+  }
+  .pa1 { background: linear-gradient(160deg, #1a0533 0%, #4c1d95 50%, #7c3aed 100%); }
+  .pa2 { background: linear-gradient(160deg, #0a192f 0%, #1e40af 50%, #2563eb 100%); }
+  .pa3 { background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%); }
+  .pa4 { background: linear-gradient(160deg, #200122 0%, #6f0000 60%, #200122 100%); }
+  .pa5 { background: linear-gradient(160deg, #0d0d1a 0%, #1a1a4e 50%, #4338ca 100%); }
+  .pa6 { background: linear-gradient(160deg, #000428 0%, #004e92 100%); }
+
+  .portfolio-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(7,8,15,.95) 0%, rgba(7,8,15,.2) 50%, transparent 100%);
+    opacity: 0; transition: opacity .3s;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 1.5rem;
+  }
+  .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+
+  .portfolio-tag {
+    display: inline-block;
+    background: rgba(139,92,246,.25);
+    border: 1px solid var(--purple);
+    color: var(--purple-light);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .25rem .7rem;
+    border-radius: 4px;
+    margin-bottom: .5rem;
+    width: fit-content;
+  }
+  .portfolio-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: .25rem;
+  }
+  .portfolio-sub { font-size: .8rem; color: var(--muted); }
+
+  /* art SVG shapes inside portfolio */
+  .art-svg-wrap { position: absolute; inset: 0; opacity: .7; }
+
+  /* ── SERVICES ── */
+  #services { background: var(--bg); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .service-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 2.2rem 2rem;
+    position: relative; overflow: hidden;
+    transition: transform .3s, border-color .3s, box-shadow .3s;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--cyan));
+    opacity: 0; transition: opacity .3s;
+  }
+  .service-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(139,92,246,.4);
+    box-shadow: 0 20px 50px rgba(0,0,0,.4), 0 0 30px var(--glow);
+  }
+  .service-card:hover::before { opacity: 1; }
+
+  .service-card.featured {
+    background: linear-gradient(160deg, rgba(99,102,241,.12), rgba(34,211,238,.06));
+    border-color: rgba(139,92,246,.4);
+  }
+  .service-card.featured::before { opacity: 1; }
+
+  .service-icon {
+    width: 52px; height: 52px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 1.5rem;
+  }
+  .si-1 { background: rgba(139,92,246,.18); }
+  .si-2 { background: rgba(34,211,238,.15); }
+  .si-3 { background: rgba(99,102,241,.18); }
+
+  .service-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: .6rem;
+  }
+  .service-desc {
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .service-features { list-style: none; margin-bottom: 1.8rem; }
+  .service-features li {
+    display: flex; align-items: center; gap: .6rem;
+    font-size: .875rem;
+    color: var(--muted);
+    padding: .35rem 0;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+  }
+  .service-features li::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .service-price {
+    font-family: 'Syne', sans-serif;
+    font-size: .85rem;
+    color: var(--purple-light);
+    font-weight: 600;
+    letter-spacing: .05em;
+  }
+  .service-badge {
+    position: absolute; top: 1.2rem; right: 1.2rem;
+    background: linear-gradient(135deg, var(--purple), var(--neon));
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .25rem .65rem;
+    border-radius: 4px;
+  }
+
+  /* ── HOW IT WORKS ── */
+  #how { background: var(--bg2); }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    position: relative;
+  }
+  .how-grid::before {
+    content: '';
+    position: absolute;
+    top: 2.75rem; left: calc(16.66% + 1rem); right: calc(16.66% + 1rem);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--purple), var(--cyan), var(--purple), transparent);
+    opacity: .35;
+  }
+
+  .how-step {
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; padding: 2.5rem 1.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    transition: border-color .3s, box-shadow .3s;
+  }
+  .how-step:hover {
+    border-color: rgba(139,92,246,.4);
+    box-shadow: 0 0 40px var(--glow);
+  }
+
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--purple-light), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+  }
+  .step-icon {
+    font-size: 2rem; margin-bottom: 1.2rem;
+    width: 64px; height: 64px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(139,92,246,.12);
+    border: 1px solid var(--border);
+  }
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: .6rem;
+  }
+  .step-desc { color: var(--muted); font-size: .9rem; line-height: 1.65; }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials { background: var(--bg); overflow: hidden; }
+
+  .testimonial-track-wrap {
+    overflow: hidden; margin: 0 -5vw; padding: 0 5vw;
+  }
+  .testimonial-track {
+    display: flex; gap: 1.5rem;
+    animation: marquee 30s linear infinite;
+    width: max-content;
+  }
+  .testimonial-track:hover { animation-play-state: paused; }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .tcard {
+    width: 340px; flex-shrink: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.8rem;
+    transition: border-color .3s;
+  }
+  .tcard:hover { border-color: rgba(139,92,246,.4); }
+
+  .tcard-stars { color: var(--cyan); font-size: .9rem; margin-bottom: .9rem; letter-spacing: .1em; }
+  .tcard-text {
+    color: var(--text);
+    font-size: .92rem;
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+  .tcard-text::before { content: '"'; }
+  .tcard-text::after { content: '"'; }
+  .tcard-author { display: flex; align-items: center; gap: .9rem; }
+  .author-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+  }
+  .av1 { background: linear-gradient(135deg, #4c1d95, #7c3aed); }
+  .av2 { background: linear-gradient(135deg, #1e3a8a, #2563eb); }
+  .av3 { background: linear-gradient(135deg, #701a75, #a21caf); }
+  .av4 { background: linear-gradient(135deg, #134e4a, #0d9488); }
+  .av5 { background: linear-gradient(135deg, #7c2d12, #ea580c); }
+  .av6 { background: linear-gradient(135deg, #1e1b4b, #4338ca); }
+  .author-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .9rem; }
+  .author-role { font-size: .78rem; color: var(--muted); }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--bg2);
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+  }
+  .about-visual {
+    position: relative; border-radius: 24px; overflow: hidden;
+    aspect-ratio: 4/5;
+    border: 1px solid var(--border);
+    box-shadow: 0 30px 80px rgba(0,0,0,.5), 0 0 50px var(--glow);
+  }
+  .about-visual-bg {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, #0c0535, #2d1b69, #4c1d95, #1e1b4b);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .about-visual-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(139,92,246,.25) 0%, transparent 70%);
+  }
+  .about-glow-orb {
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,.4), transparent);
+    animation: orbPulse 4s ease-in-out infinite;
+  }
+  @keyframes orbPulse {
+    0%, 100% { transform: scale(1); opacity: .6; }
+    50% { transform: scale(1.2); opacity: 1; }
+  }
+  .about-badge {
+    position: absolute; bottom: 1.5rem; left: 1.5rem;
+    background: rgba(7,8,15,.9);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    backdrop-filter: blur(12px);
+  }
+  .about-badge-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.8rem;
+    background: linear-gradient(90deg, var(--purple-light), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  .about-badge-label { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
+
+  .about-text h2 { margin-bottom: 1.2rem; }
+  .about-text p {
+    color: var(--muted);
+    font-size: .97rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+  }
+  .about-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1rem; margin-top: 2.5rem;
+  }
+  .about-stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .about-stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.6rem;
+    color: var(--purple-light);
+    line-height: 1;
+  }
+  .about-stat-label { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--bg); }
+
+  .contact-wrap {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: start;
+  }
+
+  .contact-info h2 { margin-bottom: 1rem; }
+  .contact-info p {
+    color: var(--muted); font-size: .97rem; line-height: 1.8;
+    font-weight: 300; margin-bottom: 2rem;
+  }
+
+  .wa-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    background: #25D366;
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .3s;
+    box-shadow: 0 0 30px rgba(37,211,102,.3);
+    margin-bottom: 2rem;
+  }
+  .wa-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(37,211,102,.5);
+  }
+  .wa-icon { font-size: 1.3rem; }
+
+  .contact-details { display: flex; flex-direction: column; gap: .8rem; }
+  .contact-detail {
+    display: flex; align-items: center; gap: .8rem;
+    color: var(--muted); font-size: .9rem;
+  }
+  .detail-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: rgba(139,92,246,.12);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .9rem; flex-shrink: 0;
+  }
+
+  /* Form */
+  .contact-form {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem;
+  }
+  .form-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 1.2rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .form-group { margin-bottom: 1.25rem; }
+  .form-label {
+    display: block;
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: .5rem;
+    letter-spacing: .03em;
+  }
+  .form-input, .form-textarea {
+    width: 100%;
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .85rem 1rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    outline: none;
+    transition: border-color .25s, box-shadow .25s;
+  }
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(139,92,246,.15);
+  }
+  .form-textarea { resize: vertical; min-height: 120px; }
+  .form-input::placeholder, .form-textarea::placeholder { color: rgba(124,132,163,.5); }
+
+  .form-submit {
+    width: 100%;
+    background: linear-gradient(135deg, var(--purple), var(--neon));
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: none;
+    transition: transform .2s, box-shadow .3s;
+    margin-top: .5rem;
+  }
+  .form-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(139,92,246,.5);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 3.5rem 5vw 2rem;
+  }
+  .footer-main {
+    display: flex; justify-content: space-between; align-items: start;
+    gap: 2rem; flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .footer-brand .nav-logo { display: block; margin-bottom: .8rem; }
+  .footer-tagline { color: var(--muted); font-size: .9rem; max-width: 260px; line-height: 1.6; }
+  .footer-nav h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: .9rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+  .footer-nav ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+  .footer-nav a { color: var(--muted); text-decoration: none; font-size: .88rem; transition: color .25s; }
+  .footer-nav a:hover { color: var(--purple-light); }
+
+  .social-links { display: flex; gap: .75rem; }
+  .social-link {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background .25s, border-color .25s, color .25s;
+  }
+  .social-link:hover {
+    background: rgba(139,92,246,.15);
+    border-color: var(--purple);
+    color: var(--purple-light);
+  }
+
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-copy { color: var(--muted); font-size: .82rem; }
+  .fiverr-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(29,191,115,.1);
+    border: 1px solid rgba(29,191,115,.25);
+    color: #1DBF73;
+    padding: .4rem 1rem;
+    border-radius: 6px;
+    font-size: .82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background .25s;
+  }
+  .fiverr-badge:hover { background: rgba(29,191,115,.18); }
+
+  /* ── REVEAL ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(36px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+  .reveal-delay-4 { transition-delay: .4s; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+    .services-grid, .how-grid { grid-template-columns: 1fr; }
+    .how-grid::before { display: none; }
+    #about { grid-template-columns: 1fr; }
+    .about-visual { max-width: 380px; margin: 0 auto; }
+    .contact-wrap { grid-template-columns: 1fr; }
+    .footer-main { flex-direction: column; }
+  }
+  @media (max-width: 640px) {
+    nav { padding: 1rem 4vw; }
+    .nav-links { display: none; }
+    .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(7,8,15,.97); backdrop-filter: blur(20px); padding: 1.5rem; border-bottom: 1px solid var(--border); }
+    .hamburger { display: flex; }
+    .portfolio-grid { grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .hero-art { opacity: .25; }
+    .hero-art-1, .hero-art-3 { left: -5%; }
+    .hero-art-2, .hero-art-4 { right: -5%; }
+    section { padding: 4.5rem 4vw; }
+    .about-stats { grid-template-columns: repeat(3, 1fr); }
+  }
+
+
+.discord-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  background: #5865F2;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.discord-btn:hover {
+  background: #4752C4;
+  transform: scale(1.05);
+}
+
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Paul Arts<span>Work</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#how">Process</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="#contact" class="nav-cta">Order Now</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <!-- Floating art cards -->
+  <div class="hero-art hero-art-1">
+    <div class="art-placeholder art-p1">
+      <svg class="svg-art" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="90" r="55" fill="rgba(167,139,250,.3)" />
+        <ellipse cx="100" cy="155" rx="40" ry="25" fill="rgba(139,92,246,.2)" />
+        <circle cx="100" cy="80" r="35" fill="rgba(167,139,250,.5)" />
+        <circle cx="88" cy="72" r="5" fill="rgba(255,255,255,.8)" />
+        <circle cx="112" cy="72" r="5" fill="rgba(255,255,255,.8)" />
+        <path d="M88 95 Q100 108 112 95" stroke="rgba(255,255,255,.6)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M60 120 Q100 200 140 120" fill="rgba(99,102,241,.3)" />
+      </svg>
+    </div>
+  </div>
+  <div class="hero-art hero-art-2">
+    <div class="art-placeholder art-p2">
+      <svg class="svg-art" viewBox="0 0 170 200" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="85,20 150,80 130,160 40,160 20,80" fill="rgba(34,211,238,.15)" stroke="rgba(34,211,238,.4)" stroke-width="1"/>
+        <circle cx="85" cy="100" r="40" fill="rgba(59,130,246,.3)"/>
+        <circle cx="85" cy="90" r="25" fill="rgba(147,197,253,.4)"/>
+        <path d="M50 140 L85 40 L120 140" fill="rgba(34,211,238,.2)" />
+      </svg>
+    </div>
+  </div>
+  <div class="hero-art hero-art-3">
+    <div class="art-placeholder art-p3">
+      <svg class="svg-art" viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="20" width="100" height="140" rx="12" fill="rgba(99,102,241,.2)" stroke="rgba(139,92,246,.3)" stroke-width="1"/>
+        <circle cx="70" cy="80" r="30" fill="rgba(167,139,250,.4)"/>
+        <circle cx="70" cy="70" r="18" fill="rgba(216,180,254,.5)"/>
+        <rect x="30" y="125" width="80" height="4" rx="2" fill="rgba(139,92,246,.4)"/>
+        <rect x="40" y="136" width="60" height="3" rx="2" fill="rgba(139,92,246,.25)"/>
+      </svg>
+    </div>
+  </div>
+  <div class="hero-art hero-art-4">
+    <div class="art-placeholder art-p4">
+      <svg class="svg-art" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="80" cy="90" rx="55" ry="65" fill="rgba(220,38,38,.15)" stroke="rgba(239,68,68,.3)" stroke-width="1"/>
+        <circle cx="80" cy="75" r="32" fill="rgba(167,139,250,.35)"/>
+        <circle cx="80" cy="65" r="20" fill="rgba(216,180,254,.4)"/>
+        <path d="M50 130 Q80 170 110 130" fill="rgba(139,92,246,.25)" />
+      </svg>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span>Available for Commissions</div>
+    <h1>Custom Digital Art<br>&amp; <em>Illustrations</em></h1>
+    <p class="hero-sub">Bringing your ideas to life through unique and creative artwork — portraits, characters, and visual concepts crafted with passion.</p>
+    <div class="hero-ctas">
+      <a href="https://t.me/paul_wolf22?text=Hi%20Paul%20Arts%20Work!%20I%27d%20like%20to%20order%20custom%20art." class="btn-primary" target="_blank">
+        <span>📱</span> Order Now
+      </a>
+      <a href="#portfolio" class="btn-ghost">
+        <span>🎨</span> View Portfolio
+      </a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="portfolio-header reveal">
+    <div class="section-label">Portfolio</div>
+    <h2 class="section-title">Creative <em>Works</em></h2>
+    <p class="section-sub">A curated showcase of custom digital artworks, each one crafted uniquely for the client.</p>
+  </div>
+
+  <div class="filter-tabs reveal">
+    <button class="filter-btn active">All Works</button>
+    <button class="filter-btn">Portraits</button>
+    <button class="filter-btn">Character Design</button>
+    <button class="filter-btn">Custom Art</button>
+  </div>
+
+  <div class="portfolio-grid">
+    <div class="portfolio-item reveal">
+      <img src="a1.jpeg" alt="Fantasy Portrait" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">Portrait</span>
+        <div class="portfolio-title">Fantasy Portrait</div>
+        <div class="portfolio-sub">Digital illustration · 2024</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item reveal reveal-delay-1">
+      <img src="a2.jpeg" alt="Knight Commander" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">Character Design</span>
+        <div class="portfolio-title">Knight Commander</div>
+        <div class="portfolio-sub">Character design · 2024</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item reveal reveal-delay-2">
+      <img src="a3.jpeg" alt="Cosmic Dreams" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">Custom Art</span>
+        <div class="portfolio-title">Cosmic Dreams</div>
+        <div class="portfolio-sub">Abstract digital · 2024</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item reveal">
+      <img src="a4.jpeg" alt="Dragon OC" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">Character Design</span>
+        <div class="portfolio-title">Dragon OC</div>
+        <div class="portfolio-sub">Fantasy character · 2024</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item reveal reveal-delay-1">
+      <img src="a7.jpeg" alt="Anime Style OC" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">Portrait</span>
+        <div class="portfolio-title">Anime Style OC</div>
+        <div class="portfolio-sub">Character portrait · 2024</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item reveal reveal-delay-2">
+      <img src="a6.jpeg" alt="Neon Cityscape" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">Custom Art</span>
+        <div class="portfolio-title">Neon Cityscape</div>
+        <div class="portfolio-sub">Digital painting · 2024</div>
+      </div>
+    </div>
+
+    
+      </div>
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">Your Work</span>
+        <div class="portfolio-title">Your Artwork</div>
+        <div class="portfolio-sub">Add your image file</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="reveal">
+    <div class="section-label">Services</div>
+    <h2 class="section-title">Choose Your <em>Package</em></h2>
+    <p class="section-sub">Every commission is crafted with care and attention to detail. Pick the package that fits your vision.</p>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon si-1">✏️</div>
+      <div class="service-name">Basic Sketch</div>
+      <p class="service-desc">Clean linework sketches — perfect for character concepts, pose refs, or simple portraits.</p>
+      <ul class="service-features">
+        <li>Single character sketch</li>
+        <li>B&amp;W or light shading</li>
+      </ul>
+      <div class="service-price">Affordable rates available</div>
+    </div>
+
+    <div class="service-card featured reveal reveal-delay-1">
+      <div class="service-badge">Popular</div>
+      <div class="service-icon si-2">🎨</div>
+      <div class="service-name">Colored Illustration</div>
+      <p class="service-desc">Full color digital illustration with shading, lighting, and a simple background. Ideal for OC art and commissions.</p>
+      <ul class="service-features">
+        <li>Full body or bust</li>
+        <li>Full color + shading</li>
+        <li>Simple background</li>
+      </ul>
+      <div class="service-price">Affordable rates available</div>
+    </div>
+
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-icon si-3">🖼️</div>
+      <div class="service-name">Full Detailed Artwork</div>
+      <p class="service-desc">Premium illustration with intricate details, complex backgrounds, visual effects, and cinematic lighting.</p>
+      <ul class="service-features">
+        <li>Multiple characters</li>
+        <li>Complex background scene</li>
+        <li>VFX &amp; lighting effects</li>
+        <li>All source files included</li>
+      </ul>
+      <div class="service-price">Affordable rates available</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="reveal" style="text-align:center; max-width:600px; margin: 0 auto 4rem;">
+    <div class="section-label" style="justify-content:center;">Process</div>
+    <h2 class="section-title">How It <em>Works</em></h2>
+    <p class="section-sub" style="margin:0 auto;">Simple, transparent, and collaborative — from your idea to the final piece.</p>
+  </div>
+
+  <div class="how-grid">
+    <div class="how-step reveal">
+      <div class="step-num">01</div>
+      <div class="step-icon">💬</div>
+      <div class="step-title">Send Your Idea</div>
+      <p class="step-desc">Message me on Telegram with your concept, references, and any specific details you want in your art.</p>
+    </div>
+    <div class="how-step reveal reveal-delay-1">
+      <div class="step-num">02</div>
+      <div class="step-icon">✏️</div>
+      <div class="step-title">Get a Sketch Preview</div>
+      <p class="step-desc">I'll send a rough sketch for your approval before moving forward. Adjustments are welcome at this stage.</p>
+    </div>
+    <div class="how-step reveal reveal-delay-2">
+      <div class="step-num">03</div>
+      <div class="step-icon">✨</div>
+      <div class="step-title">Final Art Delivered</div>
+      <p class="step-desc">After your approval, I complete the full artwork and deliver your high-resolution file, ready to use.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="reveal" style="margin-bottom: 3rem;">
+    <div class="section-label">Testimonials</div>
+    <h2 class="section-title">What Clients <em>Say</em></h2>
+  </div>
+
+  <div class="testimonial-track-wrap">
+    <div class="testimonial-track">
+      <!-- First set -->
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">The portrait was absolutely stunning. Paul captured every detail I asked for and the colors were beyond what I imagined. Highly recommend!</p>
+        <div class="tcard-author">
+          <div class="author-avatar av1">😊</div>
+          <div>
+            <div class="author-name">Amara J.</div>
+            <div class="author-role">Character Commission</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">Ordered a brand mascot for my Twitch channel and got exactly what I envisioned — plus more. The turnaround time was fast and communication was perfect.</p>
+        <div class="tcard-author">
+          <div class="author-avatar av2">🎮</div>
+          <div>
+            <div class="author-name">DarkWave_Tv</div>
+            <div class="author-role">Twitch Streamer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">Paul Arts Work created beautiful artwork for my fantasy novel cover. The detail, mood, and style matched my vision perfectly. A true professional artist.</p>
+        <div class="tcard-author">
+          <div class="author-avatar av3">📖</div>
+          <div>
+            <div class="author-name">Elena R.</div>
+            <div class="author-role">Novel Cover Art</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">Incredible work! My OC design came out amazing. The artist took the time to understand my character's personality and it shows in every line.</p>
+        <div class="tcard-author">
+          <div class="author-avatar av4">🌟</div>
+          <div>
+            <div class="author-name">Kole M.</div>
+            <div class="author-role">OC Commission</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">Ordered custom art for my brand and the result was professional, modern, and exactly on-brand. Will definitely order again for future projects.</p>
+        <div class="tcard-author">
+          <div class="author-avatar av5">🚀</div>
+          <div>
+            <div class="author-name">Prime Clothing Co.</div>
+            <div class="author-role">Brand Art</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">Got a couples portrait done as a gift. My partner was genuinely moved to tears. The artistry, expressions, and emotion were captured beautifully.</p>
+        <div class="tcard-author">
+          <div class="author-avatar av6">💜</div>
+          <div>
+            <div class="author-name">Yemi & Sola</div>
+            <div class="author-role">Couples Portrait</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Duplicate for seamless loop -->
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">The portrait was absolutely stunning. Paul captured every detail I asked for and the colors were beyond what I imagined. Highly recommend!</p>
+        <div class="tcard-author">
+          <div class="author-avatar av1">😊</div>
+          <div>
+            <div class="author-name">Amara J.</div>
+            <div class="author-role">Character Commission</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">Ordered a brand mascot for my Twitch channel and got exactly what I envisioned — plus more. The turnaround time was fast and communication was perfect.</p>
+        <div class="tcard-author">
+          <div class="author-avatar av2">🎮</div>
+          <div>
+            <div class="author-name">DarkWave_Tv</div>
+            <div class="author-role">Twitch Streamer</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">Paul Arts Work created beautiful artwork for my fantasy novel cover. The detail, mood, and style matched my vision perfectly. A true professional artist.</p>
+          </div>
+        </div>
+      </div>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <div class="about-visual-bg">
+      <svg width="100%" height="100%" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0">
+        <!-- Abstract artist figure -->
+        <defs>
+          <radialGradient id="ag1" cx="50%" cy="45%">
+            <stop offset="0%" stop-color="#c4b5fd" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="#4c1d95" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="200" cy="220" r="140" fill="url(#ag1)"/>
+        <!-- artist silhouette -->
+        <circle cx="200" cy="120" r="50" fill="rgba(167,139,250,.7)"/>
+        <circle cx="200" cy="108" r="34" fill="rgba(216,180,254,.8)"/>
+        <!-- hair -->
+        <path d="M165 110 Q160 70 185 50 Q200 38 215 50 Q240 70 235 110" fill="rgba(30,27,75,.95)"/>
+        <!-- features -->
+        <circle cx="188" cy="100" r="7" fill="rgba(30,27,75,.9)"/>
+        <circle cx="212" cy="100" r="7" fill="rgba(30,27,75,.9)"/>
+        <circle cx="186" cy="98" r="2.5" fill="white"/>
+        <circle cx="210" cy="98" r="2.5" fill="white"/>
+        <path d="M192 118 Q200 126 208 118" stroke="rgba(30,27,75,.7)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <!-- body -->
+        <path d="M155 185 Q140 180 148 230 L200 245 L252 230 Q260 180 245 185 Q225 178 200 183 Q175 178 155 185Z" fill="rgba(67,56,202,.65)" stroke="rgba(129,140,248,.3)" stroke-width="1"/>
+        <!-- drawing tablet arm -->
+        <path d="M148 200 Q120 215 110 260 Q130 265 140 250 Q145 225 158 215Z" fill="rgba(67,56,202,.6)" stroke="rgba(129,140,248,.3)" stroke-width="1"/>
+        <!-- stylus -->
+        <rect x="85" y="250" width="3" height="30" rx="1.5" fill="rgba(196,181,253,.8)" transform="rotate(-30,85,250)"/>
+        <!-- tablet -->
+        <rect x="100" y="280" width="90" height="65" rx="8" fill="rgba(17,24,39,.8)" stroke="rgba(129,140,248,.5)" stroke-width="1.5"/>
+        <rect x="106" y="286" width="78" height="53" rx="5" fill="rgba(30,27,75,.7)"/>
+        <!-- mini artwork on tablet -->
+        <circle cx="145" cy="312" r="15" fill="rgba(139,92,246,.4)"/>
+        <circle cx="145" cy="308" r="10" fill="rgba(167,139,250,.6)"/>
+        <!-- floating elements around artist -->
+        <text x="290" y="90" font-size="28" fill="rgba(196,181,253,.4)">✦</text>
+        <text x="50" y="180" font-size="20" fill="rgba(34,211,238,.35)">✦</text>
+        <text x="310" y="300" font-size="16" fill="rgba(196,181,253,.4)">✦</text>
+        <text x="60" y="380" font-size="12" fill="rgba(129,140,248,.4)">✦</text>
+        <!-- sparkle lines -->
+        <line x1="280" y1="200" x2="320" y2="180" stroke="rgba(196,181,253,.2)" stroke-width="1"/>
+        <line x1="320" y1="180" x2="345" y2="200" stroke="rgba(196,181,253,.15)" stroke-width="1"/>
+        <circle cx="345" cy="200" r="4" fill="rgba(34,211,238,.4)"/>
+        <!-- color palette dots -->
+        <circle cx="290" cy="380" r="10" fill="rgba(139,92,246,.6)"/>
+        <circle cx="308" cy="380" r="10" fill="rgba(34,211,238,.6)"/>
+        <circle cx="326" cy="380" r="10" fill="rgba(251,113,133,.5)"/>
+        <circle cx="344" cy="380" r="10" fill="rgba(52,211,153,.5)"/>
+      </svg>
+      <div class="about-glow-orb"></div>
+    </div>
+    <div class="about-badge">
+      <div class="about-badge-num">200+</div>
+      <div class="about-badge-label">Commissions Completed</div>
+    </div>
+  </div>
+
+  <div class="about-text reveal reveal-delay-1">
+    <div class="section-label">About</div>
+    <h2 class="section-title">The Artist<br>Behind <em>Paul Arts Work</em></h2>
+    <p>Paul Arts Work is a freelance digital artist focused on creating custom illustrations, character designs, and unique visual concepts for individuals and brands.</p>
+    <p>With a passion for storytelling through visuals, every piece is crafted with intention — capturing personality, emotion, and creativity in each stroke. Whether it's a personal commission, brand identity, or fantasy world-building, the goal is always to exceed your expectations.</p>
+    <a href="#contact" class="btn-primary" style="display:inline-flex; margin-top:.5rem;">
+      Start Your Commission
+    </a>
+    <div class="about-stats">
+      <div class="about-stat">
+        <div class="about-stat-num">200+</div>
+        <div class="about-stat-label">Commissions</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">5★</div>
+        <div class="about-stat-label">Avg Rating</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">48h</div>
+        <div class="about-stat-label">Avg Turnaround</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="contact-info reveal">
+      <div class="section-label">Contact</div>
+      <h2 class="section-title">Ready to<br><em>Order?</em></h2>
+      <p>Tell me about your project and let's create something amazing together. I typically respond within a few hours.</p>
+
+      <a href="https://t.me/paul_wolf22?text=Hi%20Paul%20Arts%20Work!%20I%27d%20like%20to%20order%20custom%20art." class="wa-btn" target="_blank">
+        <span class="wa-icon">📱</span> Order on Telegram
+      </a>
+
+      <div class="contact-details">
+        <div class="contact-detail">
+          <div class="detail-icon">⏱️</div>
+          <span>Typically responds within 2–4 hours</span>
+        </div>
+        <div class="contact-detail">
+          <div class="detail-icon">🎨</div>
+          <span>Commissions: Open</span>
+        </div>
+        <div class="contact-detail">
+          <div class="detail-icon">🌍</div>
+          <span>Available worldwide</span>
+        </div>
+        <div class="contact-detail">
+          <div class="detail-icon">💳</div>
+          <span>PayPal · Milestone · Bank Transfer</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GALLERY SECTION -->
+<section id="gallery-section" style="background: var(--bg2); padding: 7rem 5vw;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <div class="section-label" style="justify-content: center;">Gallery</div>
+      <h2 class="section-title">Explore Full <em>Collection</em></h2>
+      <p class="section-sub" style="margin: 0 auto; max-width: 500px;">Browse our complete gallery with 24 curated artworks — from character designs to digital paintings</p>
+    </div>
+    <div style="text-align: center;">
+      <a href="gallery.html" class="btn-primary" style="display: inline-flex; text-decoration: none;">
+        View Full Gallery →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <a href="#hero" class="nav-logo">Paul Arts<span>Work</span></a>
+      <p class="footer-tagline">Custom digital art & illustrations crafted with passion and creativity.</p>
+      <div class="social-links" style="margin-top:1.2rem;">
+        <a href="https://t.me/paul_wolf22?text=Hi%20Paul%20Arts%20Work!%20I%27d%20like%20to%20order%20custom%20art." class="social-link" title="Telegram">T</a>
+ <a href="https://discord.com/users/1423889108949930065" target="_blank" class="discord-btn">
+         Add Me on Discord
+      </a>
+      </div>
+    </div>
+
+    <div class="footer-nav">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#how">Process</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-nav">
+      <h4>Commission Info</h4>
+      <ul>
+        <li><a href="#services">Basic Sketch</a></li>
+        <li><a href="#services">Colored Illustration</a></li>
+        <li><a href="#services">Full Detailed Art</a></li>
+        <li><a href="#how">How It Works</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Paul Arts Work. All rights reserved. Artworks are property of their respective clients.</p>
+    <a href="https://www.fiverr.com" class="fiverr-badge" target="_blank">
+      🟢 Also on Fiverr
+    </a>
+  </div>
+</footer>
+
+<script>
+  // ── CURSOR ──
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .portfolio-item, .filter-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+      cursor.style.background = 'var(--purple-light)';
+      ring.style.opacity = '1';
+      ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      cursor.style.background = 'var(--cyan)';
+      ring.style.opacity = '0.6';
+      ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    });
+  });
+
+  // ── NAV SCROLL ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // ── HAMBURGER ──
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('nav-links');
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    const spans = hamburger.querySelectorAll('span');
+    spans[0].style.transform = navLinks.classList.contains('open') ? 'rotate(45deg) translate(5px,5px)' : '';
+    spans[1].style.opacity = navLinks.classList.contains('open') ? '0' : '1';
+    spans[2].style.transform = navLinks.classList.contains('open') ? 'rotate(-45deg) translate(5px,-5px)' : '';
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    hamburger.querySelectorAll('span').forEach(s => { s.style.transform=''; s.style.opacity='1'; });
+  }));
+
+  // ── REVEAL ON SCROLL ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // ── FILTER TABS ──
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // ── FORM SUBMIT ──
+  function handleFormSubmit(btn) {
+    const form = btn.closest('.contact-form');
+    const name = form.querySelector('input[type=text]').value;
+    const email = form.querySelector('input[type=email]').value;
+    const desc = form.querySelector('textarea').value;
+    if (!name || !email || !desc) {
+      btn.textContent = '⚠️ Please fill all fields';
+      btn.style.background = 'linear-gradient(135deg, #b45309, #92400e)';
+      setTimeout(() => {
+        btn.textContent = 'Send Commission Request ✨';
+        btn.style.background = '';
+      }, 2500);
+      return;
+    }
+    btn.textContent = '✅ Request Sent! I\'ll be in touch soon.';
+    btn.style.background = 'linear-gradient(135deg, #059669, #047857)';
+    btn.disabled = true;
+  }
+
+  // ── PARALLAX HERO ARTS ──
+  const heroArts = document.querySelectorAll('.hero-art');
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    heroArts.forEach((art, i) => {
+      const speed = (i % 2 === 0) ? 0.08 : 0.05;
+      const dir = (i < 2) ? -1 : 1;
+      art.style.transform = `translateY(${scrollY * speed * dir}px)`;
+    });
+  });
+</script>
+</body>
+</html>
